@@ -17,9 +17,9 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
+      minlength: [6, "Password must be at least 6 characters long"],
     },
-    carItems: [
+    cartItems: [
       {
         quantity: {
           type: Number,
@@ -36,7 +36,6 @@ const userSchema = new mongoose.Schema(
       enum: ["customer", "admin"],
       default: "customer",
     },
-    // createdAt, updatedAt
   },
   {
     timestamps: true,
@@ -56,11 +55,10 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Method to compare password with hashed password in database
 userSchema.methods.comparePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+  return bcrypt.compare(password, this.password);
 };
 
-// Export the User model
 const User = mongoose.model("User", userSchema);
+
 export default User;
